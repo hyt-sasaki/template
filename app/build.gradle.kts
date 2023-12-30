@@ -10,6 +10,6 @@ plugins {
 
 dependencies {
     implementation(libs.spring.boot.web)
-    implementation(libs.logstash.logback.encoder)
+    runtimeOnly(libs.logstash.logback.encoder)
 }
 
