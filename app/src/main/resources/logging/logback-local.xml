@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration>
+
+<configuration>
+    <import class="ch.qos.logback.core.ConsoleAppender"/>
+    <import class="net.logstash.logback.encoder.LogstashEncoder" />
+    <import class="net.logstash.logback.decorate.PrettyPrintingJsonGeneratorDecorator" />
+
+    <appender name="STDOUT" class="ConsoleAppender">
+        <encoder class="LogstashEncoder">
+            <jsonGeneratorDecorator class="PrettyPrintingJsonGeneratorDecorator" />
+        </encoder>
+    </appender>
+
+    <root level="info">
+        <appender-ref ref="STDOUT"/>
+    </root>
+</configuration>
