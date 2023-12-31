@@ -6,3 +6,5 @@ build
 
 # Ignore IDE settings
 .idea
+
+.task

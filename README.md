@@ -8,6 +8,6 @@ This is my template project.
 
 ```shell
 rtx install
-task docker-up
+task app-docker-up
 task run-app
 ```
