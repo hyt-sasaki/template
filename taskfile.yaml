@@ -1,0 +1,7 @@
+version: '3'
+tasks:
+  validate-envoy-config:
+    vars:
+      ENVOY_VERSION: v1.28-latest
+    cmds:
+      - docker run --rm envoyproxy/envoy:{{ .ENVOY_VERSION }} --mode validate --config-yaml "$(jsonnet app/docker/proxy/config/main.jsonnet)"

@@ -1,0 +1,1 @@
+FROM envoyproxy/envoy:tools-v1.28-latest
