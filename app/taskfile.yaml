@@ -1,0 +1,63 @@
+version: '3'
+
+includes:
+  docker:
+    taskfile: ./taskfile.docker.yaml
+    dir: .
+
+vars:
+  LOOPBACK_IP: "127.0.0.2"
+
+tasks:
+  validate:envoy-config:
+    desc: "Validate envoy config file"
+    sources:
+      - docker/proxy/**
+    vars:
+      ENVOY_VERSION: '{{.CLI_ARGS | default "v1.28-latest"}}'
+    cmds:
+      - docker run --rm envoyproxy/envoy:{{.ENVOY_VERSION}} --mode validate --config-yaml "$(jsonnet docker/proxy/config/main.jsonnet)"
+  alias-loopback-address:
+    internal: true
+    interactive: true
+    cmds:
+      - sudo ifconfig lo0 alias {{.LOOPBACK_IP}}
+    status:
+      - ifconfig lo0 | grep -q {{.LOOPBACK_IP}}
+  run:
+    dir: .. # root directory
+    desc: "Execute :app:bootRun gradle task"
+    preconditions:
+      - sh: '! lsof -i:8080'
+        msg: 'Port :8080 is in use'
+    cmds:
+      - ./gradlew :app:bootRun
+  up:
+    desc: "Alias of `task docker:compose -- up -d`"
+    deps:
+      - alias-loopback-address
+      - down
+      - image-build
+    cmds:
+      - task: docker:internal-compose
+        vars:
+          COMPOSE_CMD: up -d
+  image-build:
+    desc: "Alias of `task docker:compose -- build`"
+    sources:
+      - docker/**/*
+      - exclude: docker/compose/**
+    deps:
+      - validate:envoy-config
+    cmds:
+      - task: docker:internal-compose
+        vars:
+          COMPOSE_CMD: build
+  down:
+    desc: "Alias of `task docker:compose -- down`"
+    status:
+      - count=$(task -s docker:compose -- ps --services | wc -l); test $count -eq 0
+    cmds:
+      - task: docker:internal-compose
+        vars:
+          COMPOSE_CMD: down

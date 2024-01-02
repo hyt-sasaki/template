@@ -1,34 +1,6 @@
 version: '3'
-vars:
-  LOOPBACK_IP: "127.0.0.2"
-tasks:
-  validate-envoy-config:
-    vars:
-      ENVOY_VERSION: v1.28-latest
-    cmds:
-      - docker run --rm envoyproxy/envoy:{{ .ENVOY_VERSION }} --mode validate --config-yaml "$(jsonnet app/docker/proxy/config/main.jsonnet)"
-  alias-loopback-address:
-    cmds:
-      - sudo ifconfig lo0 alias {{ .LOOPBACK_IP }}
-    status:
-      - ifconfig lo0 | grep -q {{ .LOOPBACK_IP }}
-  app-docker-build:
-    dir: app
-    sources:
-      - docker/**
-    cmds:
-      - docker compose build
-  app-docker-up:
-    dir: app
-    deps:
-      - alias-loopback-address
-      - app-docker-build
-    cmds:
-      - docker compose up -d
-  app-docker-down:
-    dir: app
-    cmds:
-      - docker compose down
-  run-app:
-    cmds:
-      - ./gradlew :app:bootRun
+
+includes:
+  app:
+    taskfile: ./app/taskfile.yaml
+    dir: ./app

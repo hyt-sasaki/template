@@ -1,7 +1,0 @@
-services:
-  proxy:
-    build:
-      context: .
-      dockerfile: docker/proxy/Dockerfile
-    ports:
-      - "127.0.0.2:3000:3000"

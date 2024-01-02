@@ -1,8 +1,7 @@
 FROM alpine:latest AS builder
-
-COPY ./docker/proxy/config /config
 RUN apk --no-cache add jsonnet
 
+COPY ./docker/proxy/config /config
 RUN jsonnet /config/main.jsonnet > /envoy.json
 
 FROM envoyproxy/envoy:tools-v1.28-latest
