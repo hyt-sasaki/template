@@ -2,7 +2,7 @@ server:
   http2:
     enabled: true
 logging:
-  config: "classpath:logging/logback-local.xml"
+  config: "classpath:logging/logback.xml"
 spring:
   main:
     banner-mode: off
