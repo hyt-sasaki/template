@@ -2,12 +2,13 @@
 This is my template project.
 
 ## Prerequisites
-- [rtx](https://github.com/jdx/rtx)
+- install [rtx](https://github.com/jdx/rtx)
+  - e.g.) `brew install rtx`
+- install dependent tools by `rtx install`
 
 ## Quick start
 
 ```shell
-rtx install
-task app-docker-up
-task run-app
+task app:up
+task app:run
 ```
