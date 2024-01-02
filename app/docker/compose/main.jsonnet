@@ -11,15 +11,41 @@ local template(service) = {
     }
 };
 
+local logging_config(tag) = {
+    logging: {
+        driver: "fluentd",
+        options: {
+            "fluentd-address": "%s:24224" % IP,
+            tag: tag,
+        }
+    },
+};
+
 std.manifestYamlDoc({
     services: {
-        authorizer: template("authorizer"),
-        proxy: template("proxy") + {
+        authorizer: template("authorizer") + logging_config("authorizer") + {
+            depends_on: ["log_router"],
+        },
+        proxy: template("proxy") + logging_config("proxy") + {
             ports: [bind(3000), bind(9901)],
             environment: [
                 "AUTHORIZER_HOST=authorizer",
                 "AUTHORIZER_PORT=4000",
-            ]
+            ],
+            depends_on: ["log_router"],
         },
+        log_router: template("log_router") + {
+            ports: [bind(24224), bind(8877)],
+            volumes: [
+                "./docker/log_router/conf/extra.local.conf:/fluent-bit/etc/fluent-bit.conf",
+            ],
+            healthcheck: {
+                test: ["CMD-SHELL", "sh root/healthcheck.sh"],
+                interval: "3s",
+                timeout: "3s",
+                retries: 3,
+                start_period: "10s",
+            }
+        }
     },
 })
