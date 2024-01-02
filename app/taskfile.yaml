@@ -12,7 +12,7 @@ tasks:
   validate:envoy-config:
     desc: "Validate envoy config file"
     sources:
-      - docker/proxy/**
+      - docker/proxy/**/*
     vars:
       ENVOY_VERSION: '{{.CLI_ARGS | default "v1.28-latest"}}'
     cmds:

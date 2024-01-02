@@ -13,7 +13,7 @@ tasks:
     generates:
       - "{{.COMPOSE_FILE}}"
     cmds:
-      - echo -e "{{.OUTPUT}}" >> {{.COMPOSE_FILE}}
+      - echo -e "{{.OUTPUT}}" > {{.COMPOSE_FILE}}
     vars:
       RAW:
         sh: jsonnet -S docker/compose/main.jsonnet
