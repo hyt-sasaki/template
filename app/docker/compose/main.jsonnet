@@ -13,8 +13,13 @@ local template(service) = {
 
 std.manifestYamlDoc({
     services: {
+        authorizer: template("authorizer"),
         proxy: template("proxy") + {
-            ports: [bind(3000), bind(9901)]
+            ports: [bind(3000), bind(9901)],
+            environment: [
+                "AUTHORIZER_HOST=authorizer",
+                "AUTHORIZER_PORT=4000",
+            ]
         },
     },
 })
