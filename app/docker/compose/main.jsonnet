@@ -23,10 +23,10 @@ local logging_config(tag) = {
 
 std.manifestYamlDoc({
     services: {
-        authorizer: template("authorizer") + logging_config("authorizer") + {
+        authorizer: template("authorizer") + logging_config("authorizer-local") + {
             depends_on: ["log_router"],
         },
-        proxy: template("proxy") + logging_config("proxy") + {
+        proxy: template("proxy") + logging_config("proxy-local") + {
             ports: [bind(3000), bind(9901)],
             environment: [
                 "AUTHORIZER_HOST=authorizer",
@@ -36,6 +36,10 @@ std.manifestYamlDoc({
         },
         log_router: template("log_router") + {
             ports: [bind(24224), bind(8877)],
+            environment: [
+                "PROXY_MATCH=proxy*",
+                "AUTHORIZER_MATCH=authorizer*",
+            ],
             volumes: [
                 "./docker/log_router/conf/extra.local.conf:/fluent-bit/etc/fluent-bit.conf",
             ],

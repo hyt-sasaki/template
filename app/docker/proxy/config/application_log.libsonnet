@@ -1,13 +1,13 @@
 {
   log_format: {
     json_format: {
-      Timestamp: "%Y-%m-%dT%T.%F",
-      ThreadId: "%t",
-      SourceLine: "%s:%#",
-      Level: "%l",
-      LoggerName: "%n",
-      Message: "%j",
-      LogType: "application_log",
+      timestamp: "%Y-%m-%dT%T.%F",
+      threadId: "%t",
+      sourceLine: "%s:%#",
+      level: "%l",
+      loggerName: "%n",
+      message: "%j",
+      logType: "application_log",
     }
   }
 }
