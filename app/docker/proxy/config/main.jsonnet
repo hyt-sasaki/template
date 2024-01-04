@@ -1,3 +1,4 @@
+local application_log_config = import 'application_log.libsonnet';
 local clusters = import 'clusters.libsonnet';
 local router_config = import 'route_config.libsonnet';
 local http_filters = import 'http_filters.libsonnet';
@@ -18,6 +19,7 @@ local INGRESS_PORT = 3000;
 local ADMIN_PORT = 9901;
 
 {
+    application_log_config: application_log_config,
     admin: {
         address: {
             socket_address: {
